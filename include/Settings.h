@@ -25,7 +25,6 @@
 
 #include "CameraModels/GeometricCamera.h"
 
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
@@ -162,8 +161,8 @@ namespace ORB_SLAM3 {
         /*
          * Visual stuff
          */
-        GeometricCamera* calibration1_, *calibration2_;   //Camera calibration
-        GeometricCamera* originalCalib1_, *originalCalib2_;
+        GeometricCamera* calibration1_  = nullptr, *calibration2_ = nullptr;   //Camera calibration
+        GeometricCamera* originalCalib1_= nullptr, *originalCalib2_= nullptr;
         std::vector<float> vPinHoleDistorsion1_, vPinHoleDistorsion2_;
 
         cv::Size originalImSize_, newImSize_;

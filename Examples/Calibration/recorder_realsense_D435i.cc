@@ -36,14 +36,6 @@
 
 using namespace std;
 
-bool b_continue_session;
-
-void exit_loop_handler(int s){
-    cout << "Finishing session" << endl;
-    b_continue_session = false;
-
-}
-
 static rs2_option get_sensor_option(const rs2::sensor& sensor)
 {
     // Sensors usually have several options to control their properties
@@ -96,16 +88,6 @@ int main(int argc, char **argv) {
     }
 
     string directory = string(argv[argc - 1]);
-
-    struct sigaction sigIntHandler;
-
-
-    sigIntHandler.sa_handler = exit_loop_handler;
-    sigemptyset(&sigIntHandler.sa_mask);
-    sigIntHandler.sa_flags = 0;
-
-    sigaction(SIGINT, &sigIntHandler, NULL);
-    b_continue_session = true;
 
     double offset = 0; // ms
 
@@ -221,7 +203,10 @@ int main(int argc, char **argv) {
 
     cv::namedWindow("cam0",cv::WINDOW_AUTOSIZE);
 
-    while (b_continue_session){
+    int key = -1;
+    
+    do
+    {
         std::vector<rs2_vector> vGyro;
         std::vector<double> vGyro_times;
         std::vector<rs2_vector> vAccel, vAccel_Sync;
@@ -275,8 +260,9 @@ int main(int argc, char **argv) {
             gyroFile << std::setprecision(15) << vGyro_times[i] << "," << vGyro[i].x << "," << vGyro[i].y << "," << vGyro[i].z << endl;
         }
 
-        cv::waitKey(10);
-    }
+        key = cv::waitKey(20);
+
+    } while (key == -1);
 
     accFile.close();
     gyroFile.close();

@@ -32,6 +32,7 @@
 #include <cstdlib>
 #include <vector>
 
+#include "asprintf.h"
 #include "macros.h"
 
 namespace g2o {

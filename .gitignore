@@ -7,6 +7,41 @@
 # Unignore all dirs
 !*/
 
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Debug information
+*.pdb
+
+# Other project files
+*.manifest
+
 CMakeLists.txt.user
 CMakeLists_modified.txt
 

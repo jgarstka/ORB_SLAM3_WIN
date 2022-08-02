@@ -37,14 +37,6 @@
 
 using namespace std;
 
-bool b_continue_session;
-
-void exit_loop_handler(int s){
-    cout << "Finishing session" << endl;
-    b_continue_session = false;
-
-}
-
 rs2_stream find_stream_to_align(const std::vector<rs2::stream_profile>& streams);
 bool profile_changed(const std::vector<rs2::stream_profile>& current, const std::vector<rs2::stream_profile>& prev);
 
@@ -112,15 +104,6 @@ int main(int argc, char **argv) {
     if (argc == 4) {
         file_name = string(argv[argc - 1]);
     }
-
-    struct sigaction sigIntHandler;
-
-    sigIntHandler.sa_handler = exit_loop_handler;
-    sigemptyset(&sigIntHandler.sa_mask);
-    sigIntHandler.sa_flags = 0;
-
-    sigaction(SIGINT, &sigIntHandler, NULL);
-    b_continue_session = true;
 
     double offset = 0; // ms
 

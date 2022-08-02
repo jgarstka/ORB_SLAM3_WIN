@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.8)
 project(DBoW2)
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -8,16 +8,23 @@ endif()
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall  -O3 -march=native ")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall  -O3 -march=native")
 
+set(Boost_USE_STATIC_LIBS on)
+# Deactivate automatic linking of boost. This infers with cmake
+# linking process
+add_definitions( -DBOOST_ALL_NO_LIB )
+#set(Boost_DEBUG ON)
+find_package(Boost 1.79.0 REQUIRED COMPONENTS serialization)
+
 set(HDRS_DBOW2
   DBoW2/BowVector.h
-  DBoW2/FORB.h 
-  DBoW2/FClass.h       
+  DBoW2/FORB.h
+  DBoW2/FClass.h
   DBoW2/FeatureVector.h
-  DBoW2/ScoringObject.h   
+  DBoW2/ScoringObject.h
   DBoW2/TemplatedVocabulary.h)
 set(SRCS_DBOW2
   DBoW2/BowVector.cpp
-  DBoW2/FORB.cpp      
+  DBoW2/FORB.cpp
   DBoW2/FeatureVector.cpp
   DBoW2/ScoringObject.cpp)
 
@@ -40,6 +47,8 @@ endif()
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
-add_library(DBoW2 SHARED ${SRCS_DBOW2} ${SRCS_DUTILS})
+add_library(DBoW2 STATIC ${SRCS_DBOW2} ${SRCS_DUTILS})
+target_link_libraries(DBoW2 Boost::serialization)
+
 target_link_libraries(DBoW2 ${OpenCV_LIBS})
 

@@ -36,6 +36,9 @@
 #include <cstdio>
 #include <iostream>
 #include <iterator>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
 
 #if (defined (UNIX) || defined(CYGWIN)) && !defined(ANDROID)
 #include <wordexp.h>

@@ -276,6 +276,9 @@ namespace ORB_SLAM3 {
     void Settings::readCamera2(cv::FileStorage &fSettings) {
         bool found;
         vector<float> vCalibration;
+
+        std::cout << "Reading camera 2 settings" << std::endl;
+
         if (cameraType_ == PinHole) {
             bNeedToRectify_ = true;
 
@@ -284,6 +287,11 @@ namespace ORB_SLAM3 {
             float fy = readParameter<float>(fSettings,"Camera2.fy",found);
             float cx = readParameter<float>(fSettings,"Camera2.cx",found);
             float cy = readParameter<float>(fSettings,"Camera2.cy",found);
+
+            std::cout << "Cam 2 fx: " << fx << std::endl;
+            std::cout << "Cam 2 fy: " << fy << std::endl;
+            std::cout << "Cam 2 cx: " << cx << std::endl;
+            std::cout << "Cam 2 cy: " << cy << std::endl;
 
 
             vCalibration = {fx, fy, cx, cy};
@@ -337,6 +345,7 @@ namespace ORB_SLAM3 {
         if(cameraType_ == Rectified){
             b_ = readParameter<float>(fSettings,"Stereo.b",found);
             bf_ = b_ * calibration1_->getParameter(0);
+            originalCalib2_ = originalCalib1_;
         }
         else{
             cv::Mat cvTlr = readParameter<cv::Mat>(fSettings,"Stereo.T_c1_c2",found);

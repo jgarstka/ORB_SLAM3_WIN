@@ -36,14 +36,6 @@
 
 using namespace std;
 
-bool b_continue_session;
-
-void exit_loop_handler(int s){
-    cout << "Finishing session" << endl;
-    b_continue_session = false;
-
-}
-
 void interpolateData(const std::vector<double> &vBase_times,
                      std::vector<rs2_vector> &vInterp_data, std::vector<double> &vInterp_times,
                      const rs2_vector &prev_data, const double &prev_time);
@@ -108,15 +100,6 @@ int main(int argc, char **argv) {
     if (argc == 4) {
         file_name = string(argv[argc - 1]);
     }
-
-    struct sigaction sigIntHandler;
-
-    sigIntHandler.sa_handler = exit_loop_handler;
-    sigemptyset(&sigIntHandler.sa_mask);
-    sigIntHandler.sa_flags = 0;
-
-    sigaction(SIGINT, &sigIntHandler, NULL);
-    b_continue_session = true;
 
     double offset = 0; // ms
 
