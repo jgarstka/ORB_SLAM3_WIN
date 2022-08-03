@@ -1,0 +1,34 @@
+{
+    "name": "orb-slam3",
+    "version": "1.0.0",
+    "dependencies": [
+        {
+            "name": "eigen3",
+            "version>=": "3.4.0"
+        },
+        {
+            "name": "boost-serialization",
+            "version>=": "1.79.0"
+        },
+        {
+            "name": "opencv",
+            "features": [
+                "cuda"
+            ],
+            "version>=": "4.5.5"
+        },
+        {
+            "name": "g2o",
+            "version>=": "2020-02-07"
+        },
+        {
+            "name": "dbow2",
+            "version>=": "2019-08-05"
+        },
+        {
+            "name": "pangolin",
+            "version>=": "0.6"
+        }
+    ],
+    "builtin-baseline": "519f6bdd24accf358d78e4287f9ee1ff6a0995a1"
+}
