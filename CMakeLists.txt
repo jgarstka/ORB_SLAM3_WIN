@@ -124,6 +124,7 @@ include/Config.h
 include/Settings.h)
 
 add_subdirectory(Thirdparty/g2o)
+add_subdirectory(Thirdparty/DBoW2)
 
 find_package(Boost 1.79.0 REQUIRED COMPONENTS serialization)
 
