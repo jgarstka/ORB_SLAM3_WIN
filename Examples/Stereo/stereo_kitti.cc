@@ -26,24 +26,22 @@
 
 #include<System.h>
 
-using namespace std;
-
-void LoadImages(const string &strPathToSequence, vector<string> &vstrImageLeft,
-                vector<string> &vstrImageRight, vector<double> &vTimestamps);
+void LoadImages(const std::string &strPathToSequence, std::vector<std::string> &vstrImageLeft,
+                std::vector<std::string> &vstrImageRight, std::vector<double> &vTimestamps);
 
 int main(int argc, char **argv)
 {
     if(argc != 4)
     {
-        cerr << endl << "Usage: ./stereo_kitti path_to_vocabulary path_to_settings path_to_sequence" << endl;
+        std::cerr << std::endl << "Usage: ./stereo_kitti path_to_vocabulary path_to_settings path_to_sequence" << std::endl;
         return 1;
     }
 
     // Retrieve paths to images
-    vector<string> vstrImageLeft;
-    vector<string> vstrImageRight;
-    vector<double> vTimestamps;
-    LoadImages(string(argv[3]), vstrImageLeft, vstrImageRight, vTimestamps);
+    std::vector<std::string> vstrImageLeft;
+    std::vector<std::string> vstrImageRight;
+    std::vector<double> vTimestamps;
+    LoadImages(std::string(argv[3]), vstrImageLeft, vstrImageRight, vTimestamps);
 
     const int nImages = vstrImageLeft.size();
 
@@ -52,12 +50,12 @@ int main(int argc, char **argv)
     float imageScale = SLAM.GetImageScale();
 
     // Vector for tracking time statistics
-    vector<float> vTimesTrack;
+    std::vector<float> vTimesTrack;
     vTimesTrack.resize(nImages);
 
-    cout << endl << "-------" << endl;
-    cout << "Start processing sequence ..." << endl;
-    cout << "Images in the sequence: " << nImages << endl << endl;
+    std::cout << std::endl << "-------" << std::endl;
+    std::cout << "Start processing sequence ..." << std::endl;
+    std::cout << "Images in the sequence: " << nImages << std::endl << std::endl;
 
     double t_track = 0.f;
     double t_resize = 0.f;
@@ -73,8 +71,8 @@ int main(int argc, char **argv)
 
         if(imLeft.empty())
         {
-            cerr << endl << "Failed to load image at: "
-                 << string(vstrImageLeft[ni]) << endl;
+            std::cerr << std::endl << "Failed to load image at: "
+                 << std::string(vstrImageLeft[ni]) << std::endl;
             return 1;
         }
 
@@ -147,9 +145,9 @@ int main(int argc, char **argv)
     {
         totaltime+=vTimesTrack[ni];
     }
-    cout << "-------" << endl << endl;
-    cout << "median tracking time: " << vTimesTrack[nImages/2] << endl;
-    cout << "mean tracking time: " << totaltime/nImages << endl;
+    std::cout << "-------" << std::endl << std::endl;
+    std::cout << "median tracking time: " << vTimesTrack[nImages/2] << std::endl;
+    std::cout << "mean tracking time: " << totaltime/nImages << std::endl;
 
     // Save camera trajectory
     SLAM.SaveTrajectoryKITTI("CameraTrajectory.txt");
@@ -157,19 +155,19 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void LoadImages(const string &strPathToSequence, vector<string> &vstrImageLeft,
-                vector<string> &vstrImageRight, vector<double> &vTimestamps)
+void LoadImages(const std::string &strPathToSequence, std::vector<std::string> &vstrImageLeft,
+                std::vector<std::string> &vstrImageRight, std::vector<double> &vTimestamps)
 {
-    ifstream fTimes;
-    string strPathTimeFile = strPathToSequence + "/times.txt";
+    std::ifstream fTimes;
+    std::string strPathTimeFile = strPathToSequence + "/times.txt";
     fTimes.open(strPathTimeFile.c_str());
     while(!fTimes.eof())
     {
-        string s;
-        getline(fTimes,s);
+        std::string s;
+        std::getline(fTimes,s);
         if(!s.empty())
         {
-            stringstream ss;
+            std::stringstream ss;
             ss << s;
             double t;
             ss >> t;
@@ -177,8 +175,8 @@ void LoadImages(const string &strPathToSequence, vector<string> &vstrImageLeft,
         }
     }
 
-    string strPrefixLeft = strPathToSequence + "/image_0/";
-    string strPrefixRight = strPathToSequence + "/image_1/";
+    std::string strPrefixLeft = strPathToSequence + "/image_0/";
+    std::string strPrefixRight = strPathToSequence + "/image_1/";
 
     const int nTimes = vTimestamps.size();
     vstrImageLeft.resize(nTimes);

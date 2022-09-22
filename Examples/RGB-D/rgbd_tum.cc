@@ -25,36 +25,34 @@
 
 #include<System.h>
 
-using namespace std;
-
-void LoadImages(const string &strAssociationFilename, vector<string> &vstrImageFilenamesRGB,
-                vector<string> &vstrImageFilenamesD, vector<double> &vTimestamps);
+void LoadImages(const std::string &strAssociationFilename, std::vector<std::string> &vstrImageFilenamesRGB,
+                std::vector<std::string> &vstrImageFilenamesD, std::vector<double> &vTimestamps);
 
 int main(int argc, char **argv)
 {
     if(argc != 5)
     {
-        cerr << endl << "Usage: ./rgbd_tum path_to_vocabulary path_to_settings path_to_sequence path_to_association" << endl;
+        std::cerr << std::endl << "Usage: ./rgbd_tum path_to_vocabulary path_to_settings path_to_sequence path_to_association" << std::endl;
         return 1;
     }
 
     // Retrieve paths to images
-    vector<string> vstrImageFilenamesRGB;
-    vector<string> vstrImageFilenamesD;
-    vector<double> vTimestamps;
-    string strAssociationFilename = string(argv[4]);
+    std::vector<std::string> vstrImageFilenamesRGB;
+    std::vector<std::string> vstrImageFilenamesD;
+    std::vector<double> vTimestamps;
+    std::string strAssociationFilename = std::string(argv[4]);
     LoadImages(strAssociationFilename, vstrImageFilenamesRGB, vstrImageFilenamesD, vTimestamps);
 
     // Check consistency in the number of images and depthmaps
     int nImages = vstrImageFilenamesRGB.size();
     if(vstrImageFilenamesRGB.empty())
     {
-        cerr << endl << "No images found in provided path." << endl;
+        std::cerr << std::endl << "No images found in provided path." << std::endl;
         return 1;
     }
     else if(vstrImageFilenamesD.size()!=vstrImageFilenamesRGB.size())
     {
-        cerr << endl << "Different number of images for rgb and depth." << endl;
+        std::cerr << std::endl << "Different number of images for rgb and depth." << std::endl;
         return 1;
     }
 
@@ -63,26 +61,26 @@ int main(int argc, char **argv)
     float imageScale = SLAM.GetImageScale();
 
     // Vector for tracking time statistics
-    vector<float> vTimesTrack;
+    std::vector<float> vTimesTrack;
     vTimesTrack.resize(nImages);
 
-    cout << endl << "-------" << endl;
-    cout << "Start processing sequence ..." << endl;
-    cout << "Images in the sequence: " << nImages << endl << endl;
+    std::cout << std::endl << "-------" << std::endl;
+    std::cout << "Start processing sequence ..." << std::endl;
+    std::cout << "Images in the sequence: " << nImages << std::endl << std::endl;
 
     // Main loop
     cv::Mat imRGB, imD;
     for(int ni=0; ni<nImages; ni++)
     {
         // Read image and depthmap from file
-        imRGB = cv::imread(string(argv[3])+"/"+vstrImageFilenamesRGB[ni],cv::IMREAD_UNCHANGED); //,cv::IMREAD_UNCHANGED);
-        imD = cv::imread(string(argv[3])+"/"+vstrImageFilenamesD[ni],cv::IMREAD_UNCHANGED); //,cv::IMREAD_UNCHANGED);
+        imRGB = cv::imread(std::string(argv[3])+"/"+vstrImageFilenamesRGB[ni],cv::IMREAD_UNCHANGED); //,cv::IMREAD_UNCHANGED);
+        imD = cv::imread(std::string(argv[3])+"/"+vstrImageFilenamesD[ni],cv::IMREAD_UNCHANGED); //,cv::IMREAD_UNCHANGED);
         double tframe = vTimestamps[ni];
 
         if(imRGB.empty())
         {
-            cerr << endl << "Failed to load image at: "
-                 << string(argv[3]) << "/" << vstrImageFilenamesRGB[ni] << endl;
+            std::cerr << std::endl << "Failed to load image at: "
+                 << std::string(argv[3]) << "/" << vstrImageFilenamesRGB[ni] << std::endl;
             return 1;
         }
 
@@ -134,9 +132,9 @@ int main(int argc, char **argv)
     {
         totaltime+=vTimesTrack[ni];
     }
-    cout << "-------" << endl << endl;
-    cout << "median tracking time: " << vTimesTrack[nImages/2] << endl;
-    cout << "mean tracking time: " << totaltime/nImages << endl;
+    std::cout << "-------" << std::endl << std::endl;
+    std::cout << "median tracking time: " << vTimesTrack[nImages/2] << std::endl;
+    std::cout << "mean tracking time: " << totaltime/nImages << std::endl;
 
     // Save camera trajectory
     SLAM.SaveTrajectoryTUM("CameraTrajectory.txt");
@@ -145,21 +143,21 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void LoadImages(const string &strAssociationFilename, vector<string> &vstrImageFilenamesRGB,
-                vector<string> &vstrImageFilenamesD, vector<double> &vTimestamps)
+void LoadImages(const std::string &strAssociationFilename, std::vector<std::string> &vstrImageFilenamesRGB,
+                std::vector<std::string> &vstrImageFilenamesD, std::vector<double> &vTimestamps)
 {
-    ifstream fAssociation;
+    std::ifstream fAssociation;
     fAssociation.open(strAssociationFilename.c_str());
     while(!fAssociation.eof())
     {
-        string s;
-        getline(fAssociation,s);
+        std::string s;
+        std::getline(fAssociation,s);
         if(!s.empty())
         {
-            stringstream ss;
+            std::stringstream ss;
             ss << s;
             double t;
-            string sRGB, sD;
+            std::string sRGB, sD;
             ss >> t;
             vTimestamps.push_back(t);
             ss >> sRGB;

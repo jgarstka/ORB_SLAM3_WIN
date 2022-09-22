@@ -34,8 +34,6 @@
 #include <librealsense2/rs.hpp>
 #include "librealsense2/rsutil.h"
 
-using namespace std;
-
 static rs2_option get_sensor_option(const rs2::sensor& sensor)
 {
     // Sensors usually have several options to control their properties
@@ -81,13 +79,13 @@ static rs2_option get_sensor_option(const rs2::sensor& sensor)
 int main(int argc, char **argv) {
 
     if (argc != 2) {
-        cerr << endl
+        std::cerr << std::endl
              << "Usage: ./recorder_realsense_D435i path_to_saving_folder"
-             << endl;
+             << std::endl;
         return 1;
     }
 
-    string directory = string(argv[argc - 1]);
+    std::string directory = std::string(argv[argc - 1]);
 
     double offset = 0; // ms
 
@@ -138,10 +136,10 @@ int main(int argc, char **argv) {
     std::mutex imu_mutex;
     std::condition_variable cond_image_rec;
 
-    vector<double> v_gyro_timestamp;
-    vector<rs2_vector> v_gyro_data;
-    vector<double> v_acc_timestamp;
-    vector<rs2_vector> v_acc_data;
+    std::vector<double> v_gyro_timestamp;
+    std::vector<rs2_vector> v_gyro_data;
+    std::vector<double> v_acc_timestamp;
+    std::vector<rs2_vector> v_acc_data;
 
     cv::Mat imCV;
     int width_img, height_img;
@@ -190,7 +188,7 @@ int main(int argc, char **argv) {
     height_img = intrinsics_cam.height;
 
     cv::Mat im;
-    ofstream accFile, gyroFile, cam0TsFile;
+    std::ofstream accFile, gyroFile, cam0TsFile;
     accFile.open (directory + "/IMU/acc.txt");
     gyroFile.open (directory + "/IMU/gyro.txt");
     cam0TsFile.open (directory + "/cam0/times.txt");
@@ -241,23 +239,23 @@ int main(int argc, char **argv) {
 
         // save image and IMU data
         long int imTsInt = (long int) (1e9*imTs);
-        string imgRepo = directory + "/cam0/" + to_string(imTsInt) + ".png";
+        std::string imgRepo = directory + "/cam0/" + std::to_string(imTsInt) + ".png";
         if(!im.empty()) {
             cv::imwrite(imgRepo, im);
-            cam0TsFile << imTsInt << endl;
+            cam0TsFile << imTsInt << std::endl;
         } else {
-            cout << "image empty!! \n";
+            std::cout << "image empty!! \n";
         }
 
         //assert(vAccel.size() == vAccel_times.size());
         //assert(vGyro.size() == vGyro_times.size());
 
         for(int i=0; i<vAccel.size(); ++i){
-            accFile << std::setprecision(15) << vAccel_times[i] << "," << vAccel[i].x << "," << vAccel[i].y << "," << vAccel[i].z << endl;
+            accFile << std::setprecision(15) << vAccel_times[i] << "," << vAccel[i].x << "," << vAccel[i].y << "," << vAccel[i].z << std::endl;
         }
 
         for(int i=0; i<vGyro.size(); ++i){
-            gyroFile << std::setprecision(15) << vGyro_times[i] << "," << vGyro[i].x << "," << vGyro[i].y << "," << vGyro[i].z << endl;
+            gyroFile << std::setprecision(15) << vGyro_times[i] << "," << vGyro[i].x << "," << vGyro[i].y << "," << vGyro[i].z << std::endl;
         }
 
         key = cv::waitKey(20);
@@ -268,5 +266,5 @@ int main(int argc, char **argv) {
     gyroFile.close();
     cam0TsFile.close();
 
-    cout << "System shutdown!\n";
+    std::cout << "System shutdown!\n";
 }

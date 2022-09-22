@@ -35,8 +35,6 @@
 #include <librealsense2/rs.hpp>
 #include "librealsense2/rsutil.h"
 
-using namespace std;
-
 const float reductionFactor = 0.5;
 const int colsRedIm = reductionFactor * 848;
 const int rowsRedIm = reductionFactor * 800;
@@ -86,13 +84,13 @@ static rs2_option get_sensor_option(const rs2::sensor& sensor)
 int main(int argc, char **argv) {
 
     if (argc != 2) {
-        cerr << endl
+        std::cerr << std::endl
              << "Usage: ./recorder_realsense_D435i path_to_saving_folder"
-             << endl;
+             << std::endl;
         return 1;
     }
 
-    string directory = string(argv[argc - 1]);
+    std::string directory = std::string(argv[argc - 1]);
 
     double offset = 0; // ms
 
@@ -109,10 +107,10 @@ int main(int argc, char **argv) {
     std::mutex imu_mutex;
     std::condition_variable cond_image_rec;
 
-    vector<double> v_gyro_timestamp;
-    vector<rs2_vector> v_gyro_data;
-    vector<double> v_acc_timestamp;
-    vector<rs2_vector> v_acc_data;
+    std::vector<double> v_gyro_timestamp;
+    std::vector<rs2_vector> v_gyro_data;
+    std::vector<double> v_acc_timestamp;
+    std::vector<rs2_vector> v_acc_data;
 
     cv::Mat imCV_left, imCV_right;
     int width_img, height_img;
@@ -164,16 +162,16 @@ int main(int argc, char **argv) {
     height_img = intrinsics_cam.height;
 
     cv::Mat imLeft, imRight;
-    ofstream accFile, gyroFile, cam0TsFile, cam1TsFile;
+    std::ofstream accFile, gyroFile, cam0TsFile, cam1TsFile;
     accFile.open (directory + "/IMU/acc.txt");
     gyroFile.open (directory + "/IMU/gyro.txt");
     cam0TsFile.open (directory + "/cam0/times.txt");
     cam1TsFile.open (directory + "/cam1/times.txt");
 
-    cout << directory + "/IMU/acc.txt" << endl;
+    std::cout << directory + "/IMU/acc.txt" << std::endl;
 
     if(!accFile.is_open() || ! gyroFile.is_open() || !cam0TsFile.is_open()){
-        cerr << "FILES NOT OPENED" << endl;
+        std::cerr << "FILES NOT OPENED" << std::endl;
         exit(-1);
     }
 
@@ -232,31 +230,31 @@ int main(int argc, char **argv) {
 
         // save image and IMU data
         long int imTsInt = (long int) (1e9*imTs);
-        string imgRepoLeft = directory + "/cam0/" + to_string(imTsInt) + ".png";
+        std::string imgRepoLeft = directory + "/cam0/" + std::to_string(imTsInt) + ".png";
         if(!imLeft.empty()) {
             cv::imwrite(imgRepoLeft, imLeft);
-            cam0TsFile << imTsInt << endl;
+            cam0TsFile << imTsInt << std::endl;
         } else {
-            cout << " left image empty!! \n";
+            std::cout << " left image empty!! \n";
         }
 
-        string imgRepoRight = directory + "/cam1/" + to_string(imTsInt) + ".png";
+        std::string imgRepoRight = directory + "/cam1/" + std::to_string(imTsInt) + ".png";
         if(!imRight.empty()) {
             cv::imwrite(imgRepoRight, imRight);
-            cam1TsFile << imTsInt << endl;
+            cam1TsFile << imTsInt << std::endl;
         } else {
-            cout << "right image empty!! \n";
+            std::cout << "right image empty!! \n";
         }
 
         //assert(vAccel.size() == vAccel_times.size());
         //assert(vGyro.size() == vGyro_times.size());
 
         for(int i=0; i<vAccel.size(); ++i){
-            accFile << std::setprecision(15) << vAccel_times[i] << "," << vAccel[i].x << "," << vAccel[i].y << "," << vAccel[i].z << endl;
+            accFile << std::setprecision(15) << vAccel_times[i] << "," << vAccel[i].x << "," << vAccel[i].y << "," << vAccel[i].z << std::endl;
         }
 
         for(int i=0; i<vGyro.size(); ++i){
-            gyroFile << std::setprecision(15) << vGyro_times[i] << "," << vGyro[i].x << "," << vGyro[i].y << "," << vGyro[i].z << endl;
+            gyroFile << std::setprecision(15) << vGyro_times[i] << "," << vGyro[i].x << "," << vGyro[i].y << "," << vGyro[i].z << std::endl;
         }
 
         key = cv::waitKey(20);
@@ -268,5 +266,5 @@ int main(int argc, char **argv) {
     cam0TsFile.close();
     cam1TsFile.close();
 
-    cout << "System shutdown!\n";
+    std::cout << "System shutdown!\n";
 }

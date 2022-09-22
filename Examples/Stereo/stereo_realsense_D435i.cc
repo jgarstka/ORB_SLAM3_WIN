@@ -50,7 +50,7 @@ static rs2_option get_sensor_option(const rs2::sensor& sensor)
     for (int i = 0; i < static_cast<int>(RS2_OPTION_COUNT); i++)
     {
         rs2_option option_type = static_cast<rs2_option>(i);
-        //SDK enum types can be streamed to get a string that represents them
+        //SDK enum types can be streamed to get a std::string that represents them
         std::cout << "  " << i << ": " << option_type;
 
         // To control an option, use the following api:
@@ -83,16 +83,16 @@ static rs2_option get_sensor_option(const rs2::sensor& sensor)
 int main(int argc, char **argv) {
 
     if (argc < 3 || argc > 4) {
-        cerr << endl
+        std::cerr << std::endl
              << "Usage: ./stereo_realsense_D435i path_to_vocabulary path_to_settings (trajectory_file_name)"
-             << endl;
+             << std::endl;
         return 1;
     }
 
-    string file_name;
+    std::string file_name;
 
     if (argc == 4) {
-        file_name = string(argv[argc - 1]);
+        file_name = std::string(argv[argc - 1]);
     }
 
     double offset = 0; // ms
@@ -154,7 +154,7 @@ int main(int argc, char **argv) {
 
             double new_timestamp_image = fs.get_timestamp()*1e-3;
             if(abs(timestamp_image-new_timestamp_image)<0.001){
-                // cout << "Two frames with the same timeStamp!!!\n";
+                // std::cout << "Two frames with the same timeStamp!!!\n";
                 count_im_buffer--;
                 return;
             }
@@ -192,7 +192,7 @@ int main(int argc, char **argv) {
     rs2_intrinsics intrinsics_left = cam_left.as<rs2::video_stream_profile>().get_intrinsics();
     width_img = intrinsics_left.width;
     height_img = intrinsics_left.height;
-    cout << "Left camera: \n";
+    std::cout << "Left camera: \n";
     std::cout << " fx = " << intrinsics_left.fx << std::endl;
     std::cout << " fy = " << intrinsics_left.fy << std::endl;
     std::cout << " cx = " << intrinsics_left.ppx << std::endl;
@@ -206,7 +206,7 @@ int main(int argc, char **argv) {
     rs2_intrinsics intrinsics_right = cam_right.as<rs2::video_stream_profile>().get_intrinsics();
     width_img = intrinsics_right.width;
     height_img = intrinsics_right.height;
-    cout << "Right camera: \n";
+    std::cout << "Right camera: \n";
     std::cout << " fx = " << intrinsics_right.fx << std::endl;
     std::cout << " fy = " << intrinsics_right.fy << std::endl;
     std::cout << " cx = " << intrinsics_right.ppx << std::endl;
@@ -247,7 +247,7 @@ int main(int argc, char **argv) {
 #endif
 
             if(count_im_buffer>1)
-                cout << count_im_buffer -1 << " dropped frs\n";
+                std::cout << count_im_buffer -1 << " dropped frs\n";
             count_im_buffer = 0;
 
             timestamp = timestamp_image;
@@ -301,5 +301,5 @@ int main(int argc, char **argv) {
         SLAM.InsertTrackTime(t_track);
 #endif
     }
-    cout << "System shutdown!\n";
+    std::cout << "System shutdown!\n";
 }

@@ -35,7 +35,7 @@
 
 #include <System.h>
 
-using namespace std;
+
 
 rs2_stream find_stream_to_align(const std::vector<rs2::stream_profile>& streams);
 bool profile_changed(const std::vector<rs2::stream_profile>& current, const std::vector<rs2::stream_profile>& prev);
@@ -60,7 +60,7 @@ static rs2_option get_sensor_option(const rs2::sensor& sensor)
     for (int i = 0; i < static_cast<int>(RS2_OPTION_COUNT); i++)
     {
         rs2_option option_type = static_cast<rs2_option>(i);
-        //SDK enum types can be streamed to get a string that represents them
+        //SDK enum types can be streamed to get a std::string that represents them
         std::cout << "  " << i << ": " << option_type;
 
         // To control an option, use the following api:
@@ -93,16 +93,16 @@ static rs2_option get_sensor_option(const rs2::sensor& sensor)
 int main(int argc, char **argv) {
 
     if (argc < 3 || argc > 4) {
-        cerr << endl
+        std::cerr << std::endl
              << "Usage: ./mono_inertial_realsense_D435i path_to_vocabulary path_to_settings (trajectory_file_name)"
-             << endl;
+             << std::endl;
         return 1;
     }
 
-    string file_name;
+    std::string file_name;
 
     if (argc == 4) {
-        file_name = string(argv[argc - 1]);
+        file_name = std::string(argv[argc - 1]);
     }
 
     double offset = 0; // ms
@@ -165,17 +165,17 @@ int main(int argc, char **argv) {
     std::mutex imu_mutex;
     std::condition_variable cond_image_rec;
 
-    vector<double> v_accel_timestamp;
-    vector<rs2_vector> v_accel_data;
-    vector<double> v_gyro_timestamp;
-    vector<rs2_vector> v_gyro_data;
+    std::vector<double> v_accel_timestamp;
+    std::vector<rs2_vector> v_accel_data;
+    std::vector<double> v_gyro_timestamp;
+    std::vector<rs2_vector> v_gyro_data;
 
     double prev_accel_timestamp = 0;
     rs2_vector prev_accel_data;
     double current_accel_timestamp = 0;
     rs2_vector current_accel_data;
-    vector<double> v_accel_timestamp_sync;
-    vector<rs2_vector> v_accel_data_sync;
+    std::vector<double> v_accel_timestamp_sync;
+    std::vector<rs2_vector> v_accel_data_sync;
 
     cv::Mat imCV, depthCV;
     int width_img, height_img;
@@ -273,7 +273,7 @@ int main(int argc, char **argv) {
     pipe_profile = pipe.start(cfg, imu_callback);
 
 
-    vector<ORB_SLAM3::IMU::Point> vImuMeas;
+    std::vector<ORB_SLAM3::IMU::Point> vImuMeas;
     rs2::stream_profile cam_stream = pipe_profile.get_stream(RS2_STREAM_COLOR);
 
     rs2::stream_profile imu_stream = pipe_profile.get_stream(RS2_STREAM_GYRO);
@@ -337,7 +337,7 @@ int main(int argc, char **argv) {
             fs = fsSLAM;
 
             if(count_im_buffer>1)
-                cout << count_im_buffer -1 << " dropped frs\n";
+                std::cout << count_im_buffer -1 << " dropped frs\n";
             count_im_buffer = 0;
 
             while(v_gyro_timestamp.size() > v_accel_timestamp_sync.size())
@@ -440,12 +440,12 @@ int main(int argc, char **argv) {
         // Clear the previous IMU measurements to load the new ones
         vImuMeas.clear();
     }
-    cout << "System shutdown!\n";
+    std::cout << "System shutdown!\n";
 }
 
 rs2_stream find_stream_to_align(const std::vector<rs2::stream_profile>& streams)
 {
-    //Given a vector of streams, we try to find a depth stream and another stream to align depth with.
+    //Given a std::vector of streams, we try to find a depth stream and another stream to align depth with.
     //We prioritize color streams to make the view look better.
     //If color is not available, we take another stream that (other than depth)
     rs2_stream align_to = RS2_STREAM_ANY;

@@ -34,8 +34,6 @@
 
 #include <System.h>
 
-using namespace std;
-
 rs2_vector interpolateMeasure(const double target_time,
                               const rs2_vector current_data, const double current_time,
                               const rs2_vector prev_data, const double prev_time);
@@ -85,16 +83,16 @@ static rs2_option get_sensor_option(const rs2::sensor& sensor)
 int main(int argc, char **argv) {
 
     if (argc < 3 || argc > 4) {
-        cerr << endl
+        std::cerr << std::endl
              << "Usage: ./mono_realsense_D435i path_to_vocabulary path_to_settings (trajectory_file_name)"
-             << endl;
+             << std::endl;
         return 1;
     }
 
-    string file_name;
+    std::string file_name;
 
     if (argc == 4) {
-        file_name = string(argv[argc - 1]);
+        file_name = std::string(argv[argc - 1]);
     }
 
     double offset = 0; // ms
@@ -178,7 +176,7 @@ int main(int argc, char **argv) {
     rs2_intrinsics intrinsics_left = cam_left.as<rs2::video_stream_profile>().get_intrinsics();
     width_img = intrinsics_left.width;
     height_img = intrinsics_left.height;
-    cout << "Left camera: \n";
+    std::cout << "Left camera: \n";
     std::cout << " fx = " << intrinsics_left.fx << std::endl;
     std::cout << " fy = " << intrinsics_left.fy << std::endl;
     std::cout << " cx = " << intrinsics_left.ppx << std::endl;
@@ -218,7 +216,7 @@ int main(int argc, char **argv) {
 #endif
 
             if(count_im_buffer>1)
-                cout << count_im_buffer -1 << " dropped frs\n";
+                std::cout << count_im_buffer -1 << " dropped frs\n";
             count_im_buffer = 0;
 
             timestamp = timestamp_image;
@@ -270,5 +268,5 @@ int main(int argc, char **argv) {
         SLAM.InsertTrackTime(t_track);
 #endif
     }
-    cout << "System shutdown!\n";
+    std::cout << "System shutdown!\n";
 }

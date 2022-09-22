@@ -33,7 +33,7 @@
 #include <condition_variable>
 #include "ImuTypes.h"
 
-using namespace std;
+
 
 rs2_vector interpolateMeasure(const double target_time,
                               const rs2_vector current_data, const double current_time,
@@ -42,17 +42,17 @@ rs2_vector interpolateMeasure(const double target_time,
 int main(int argc, char **argv)
 {
     if (argc < 3 || argc > 4) {
-        cerr << endl
+        std::cerr << std::endl
              << "Usage: ./mono_inertial_realsense_t265 path_to_vocabulary path_to_settings (trajectory_file_name)"
-             << endl;
+             << std::endl;
         return 1;
     }
 
-    string file_name;
+    std::string file_name;
     bool bFileName = false;
 
     if (argc == 4) {
-        file_name = string(argv[argc - 1]);
+        file_name = std::string(argv[argc - 1]);
         bFileName = true;
     }
 
@@ -77,17 +77,17 @@ int main(int argc, char **argv)
     std::mutex imu_mutex;
     std::condition_variable cond_image_rec;
 
-    vector<double> v_accel_timestamp;
-    vector<rs2_vector> v_accel_data;
-    vector<double> v_gyro_timestamp;
-    vector<rs2_vector> v_gyro_data;
+    std::vector<double> v_accel_timestamp;
+    std::vector<rs2_vector> v_accel_data;
+    std::vector<double> v_gyro_timestamp;
+    std::vector<rs2_vector> v_gyro_data;
 
     double prev_accel_timestamp = 0;
     rs2_vector prev_accel_data;
     double current_accel_timestamp = 0;
     rs2_vector current_accel_data;
-    vector<double> v_accel_timestamp_sync;
-    vector<rs2_vector> v_accel_data_sync;
+    std::vector<double> v_accel_timestamp_sync;
+    std::vector<rs2_vector> v_accel_data_sync;
 
     cv::Mat imCV,imCV_right;
     int width_img, height_img; //width_img = 848, height_img = 800;
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 
             double new_timestamp_image = fs.get_timestamp()*1e-3;
             if(abs(timestamp_image-new_timestamp_image)<0.001){
-                // cout << "Two frames with the same timeStamp!!!\n";
+                // std::cout << "Two frames with the same timeStamp!!!\n";
                 count_im_buffer--;
                 return;
             }
@@ -187,7 +187,7 @@ int main(int argc, char **argv)
 
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    vector<ORB_SLAM3::IMU::Point> vImuMeas;
+    std::vector<ORB_SLAM3::IMU::Point> vImuMeas;
 
     double timestamp;
     cv::Mat im;
@@ -220,7 +220,7 @@ int main(int argc, char **argv)
 #endif
 
             if(count_im_buffer>1)
-                cout << count_im_buffer -1 << " dropped frs\n";
+                std::cout << count_im_buffer -1 << " dropped frs\n";
             count_im_buffer = 0;
 
             while(v_gyro_timestamp.size() > v_accel_timestamp_sync.size()){
@@ -286,7 +286,7 @@ int main(int argc, char **argv)
             if(isnan(vAccel[i].x) || isnan(vAccel[i].y) || isnan(vAccel[i].z) ||
                isnan(vGyro[i].x) || isnan(vGyro[i].y) || isnan(vGyro[i].z) ||
                isnan(vGyro_times[i])){
-                //cerr << "NAN AT MAIN" << endl;
+                //std::cerr << "NAN AT MAIN" << std::endl;
                 exit(-1);
             }
         }
@@ -313,8 +313,8 @@ int main(int argc, char **argv)
         double timeProcess = std::chrono::duration_cast<std::chrono::duration<double,std::milli> >(t_Start_Track - time_Start_Process).count();
         double timeSLAM = std::chrono::duration_cast<std::chrono::duration<double,std::milli> >(t_End_Track - t_Start_Track).count();
 
-        // cout << "Time process: " << timeProcess << endl;
-        // cout << "Time SLAM: " << timeSLAM << endl;
+        // std::cout << "Time process: " << timeProcess << std::endl;
+        // std::cout << "Time SLAM: " << timeSLAM << std::endl;
 
         // Clear the previous IMU measurements to load the new ones
         vImuMeas.clear();
