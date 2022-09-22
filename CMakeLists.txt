@@ -131,8 +131,8 @@ target_link_libraries(${PROJECT_NAME}
 ${OpenCV_LIBS}
 ${EIGEN3_LIBS}
 ${Pangolin_LIBRARIES}
-${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/DBoW2.lib
-${PROJECT_SOURCE_DIR}/Thirdparty/g2o/bin/g2o.lib
+${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/$(Configuration)/DBoW2.lib
+${PROJECT_SOURCE_DIR}/Thirdparty/g2o/bin/$(Configuration)/g2o.lib
 Boost::serialization
 OpenSSL::Crypto
 )
