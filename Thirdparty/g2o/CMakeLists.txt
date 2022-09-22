@@ -64,8 +64,8 @@ SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -march=native")
 #SET(g2o_CXX_FLAGS "${g2o_CXX_FLAGS} -Wall -W")
 
 # specifying compiler flags
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${g2o_CXX_FLAGS}")
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${g2o_C_FLAGS}")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${g2o_CXX_FLAGS} /DEIGEN_STRONG_INLINE=inline /d2ReducedOptimizeHugeFunctions ")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${g2o_C_FLAGS} /DEIGEN_STRONG_INLINE=inline /d2ReducedOptimizeHugeFunctions ")
 
 # Find Eigen3
 # SET(EIGEN3_INCLUDE_DIR ${G2O_EIGEN3_INCLUDE})
