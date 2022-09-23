@@ -30,6 +30,18 @@ alt="ORB-SLAM3" width="240" height="180" border="10" /></a>
 
 [DBoW2 Place Recognition] Dorian Gálvez-López and Juan D. Tardós. **Bags of Binary Words for Fast Place Recognition in Image Sequences**. *IEEE Transactions on Robotics,* vol. 28, no. 5, pp. 1188-1197, 2012. **[PDF](http://doriangalvez.com/php/dl.php?dlp=GalvezTRO12.pdf)**
 
+# Preliminary information about the changes regarding the original version
+
+## Build process
+
+* It is recommended to install the dependencies using **[vcpkg](https://vcpkg.io/en/index.html)**. This allows an easy dependency integration into CMake. To include vcpkg, simply add the CMAKE_TOOLCHAIN_FILE variable to CMake with a reference to<br/>`<path to vcpkg>\scripts\buildsystems\vcpkg.cmake`.
+* The third party dependencies g2o and DBoW2 do not need to be compiled separately, because they are now part of the main project. This way the binding to the release/debug configuration is ensured.
+
+## Code changes
+
+* In the whole project `using namespace` directives were removed. 
+* Furthermore, compiler directives have been added to reduce problems with resources (RAM) concerning the massively forced inlines by using Eigen.
+
 # 1. License
 
 ORB-SLAM3 is released under [GPLv3 license](https://github.com/UZ-SLAMLab/ORB_SLAM3/LICENSE). For a list of all code/library dependencies (and associated licenses), please see [Dependencies.md](https://github.com/UZ-SLAMLab/ORB_SLAM3/blob/master/Dependencies.md).
